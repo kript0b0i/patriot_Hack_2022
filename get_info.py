@@ -3,10 +3,34 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 import time
-import datetime
+from datetime import date
 import pytextnow as pytn
 
+def getSemester():
 
+    season = 'Holiday'
+
+    today = date.today()
+
+    # mm/dd/y
+    d3 = today.strftime("%m/%d/%y")
+
+    dateList = d3.split('/')
+    month = dateList[0]
+    day = dateList[1]
+    year = dateList[2]
+
+    if(month == '01' or month == '02' or month == '03' or month == '04' or (month == '05' and day <= 15)):
+        season = 'Spring'
+    elif((month == '05' and day > 15) or month == '06' or month == '07' or (month == '08' and day <= 15)):
+        season = 'Summer'
+    elif((month == '08' and day > 15) or month == '09' or month == '10' or month == '11' or month == '12'):
+        season = 'Fall'
+
+    semester = season + ' ' + year
+    print(semester)
+
+    return semester
 
 
 def bot(netID, Password, Commands): 
@@ -44,8 +68,10 @@ def bot(netID, Password, Commands):
             time.sleep(1)
             Bot_Chrome.find_element(By.XPATH,'//*[@id="courses-filter"]/li[3]/a/span').click()
             time.sleep(1)
+            Bot_Chrome.find_element(By.XPATH, '//*[@id="main-content-inner"]/div/div[1]/div[1]/div/div/div[3]/div/header/bb-search-box/div/input').send_keys("")
 
 
     else:
         client.send_sms("5714842469", "Fail login")
     Bot_Chrome.close()
+
